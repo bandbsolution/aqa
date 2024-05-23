@@ -28,9 +28,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://testkube-dashboard.testkube",
-          "protocol": "http",
-          "host": ["testkube-dashboard", "testkube"]
+          "raw": "https://testkube.bandbsolution.com.ua",
+          "protocol": "https",
+          "host": ["testkube-dashboard", "bandbsolution.com.ua"]
         }
       },
       "response": []
