@@ -14,6 +14,6 @@ describe('template spec', () => {
     cy.get('[data-testid="PermIdentityIcon"]').click();
     loginForm.typeEmail(testData.email);
     loginForm.typePassword(testData.password);
-    // loginForm.clickOnLoginBtn();
+    loginForm.clickOnLoginBtn();
   })
 })
