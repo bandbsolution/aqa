@@ -5,9 +5,9 @@ module.exports = defineConfig({
   viewportWidth: 1920,
   reporter: 'mochawesome',
   reporterOptions: {
-    reportDir: 'cypress/results',
+    reportDir: 'results',
     overwrite: false,
-    html: true,
+    html: false,
     json: true,
   },
   e2e: {
