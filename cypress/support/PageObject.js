@@ -1,11 +1,10 @@
 class PageObject {
 
-    get footerSupport() {
-        return cy.get('.footer-address-text').should('have.attr','href','/ua/support');
-    }
 
-    clickOnSupportLinkinFooter() {
-        this.footerSupport.click();
+    clickOnSupportLinkInFooter() {
+        cy.get('.footer-address-text').should('have.attr','href','/ua/support').click();
+        this.assertUrl(Cypress.config('baseUrl') + '/support');
+        this.assertTitle('Підтримка');
     }
 
     visit() {
@@ -21,22 +20,49 @@ class PageObject {
     }
 
     assertNotification(notificationMessage) {
-        cy.get('#notistack-snackbar', (text) => {
-            expect(text).to.eq(notificationMessage);
-        });
+        cy.get('#notistack-snackbar')
+            .should('be.visible')
+            .and('have.text', notificationMessage);
     }
 
     openLoginModal() {
-         cy.get('[data-testid="PermIdentityIcon"]').click()
+         cy.get('[data-testid="PermIdentityIcon"]').click();
     }
 
     openSearchPage() {
-        cy.get('[data-testid="SearchIcon"]').click()
-        expect(cy.url()).eq('search?question=&type=services')
+        cy.get('[data-testid="SearchIcon"]').click();
+        this.assertUrl(Cypress.config('baseUrl') + '/search?question=&type=services');
+        this.assertTitle('Пошук');
     }
 
     closeModal() {
         cy.get('[data-testid="CloseIcon"]').click()
+    }
+
+    navigateToMenuItem(menuItem) {
+        cy.wait(3000);
+        cy.get('[aria-label="Мій профіль"]').click();
+        cy.get('p').contains(menuItem).click();
+    }
+
+    goToMyProfile() {
+        this.navigateToMenuItem('Мій профіль');
+    }
+
+    goToMySupport() {
+        this.navigateToMenuItem('Підтримка');
+    }
+
+    goToMySettings() {
+        this.navigateToMenuItem('Налаштування');
+    }
+
+    goToMySaved() {
+        this.navigateToMenuItem('Збережені');
+    }
+
+    goToMyLogout() {
+        this.navigateToMenuItem('Вийти');
     }
 
 }

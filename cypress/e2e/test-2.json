@@ -1,9 +1,0 @@
-{
-  "command": [
-    "curl",
-    "https://testkube.bandbsolution.com.ua/tests",
-    "-H",
-    "'Accept: application/json'"
-  ],
-  "expected_status": "200"
-}

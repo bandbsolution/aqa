@@ -1,6 +1,6 @@
 import PageObject from '../PageObject';
 
-class ResetPasswordFormPageObject extends PageObject {
+class ResetPasswordModal extends PageObject {
 
     get emailField() {
         return cy.get('[name="email"]');
@@ -24,4 +24,4 @@ class ResetPasswordFormPageObject extends PageObject {
 
 }
 
-export default ResetPasswordFormPageObject;
+export default ResetPasswordModal;

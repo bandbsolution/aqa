@@ -11,10 +11,10 @@ module.exports = defineConfig({
     json: true,
   },
   e2e: {
-    baseUrl: 'https://dev.bonfairplace.com/ua/',
+    baseUrl: 'https://dev.bonfairplace.com/ua',
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+
     },
-   // browser: 'chrome',
+    supportFile: 'cypress/support/e2e.js',
   },
 });

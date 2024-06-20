@@ -1,17 +1,21 @@
 import PageObject from '../PageObject';
 
-class LoginFormPageObject extends PageObject {
+class CommonPage extends PageObject {
 
-    get emailField() {
-        return cy.get('[name="email"]');
+    get nameField() {
+        return cy.get('[name="name"]');
     }
 
-    get passwordField() {
-        return cy.get('[name="password"]');
+    get textField() {
+        return cy.get('[name="text"]');
+    }
+
+    get addMediaBtn() {
+        return cy.get('[data-testid="AddIcon"]');
     }
 
     get loginBtn() {
-        return cy.get('#loginBtn').contains('Увійти')
+        return cy.get('button').contains('Відправити')
     }
 
     get seePassIcon() {
@@ -52,4 +56,4 @@ class LoginFormPageObject extends PageObject {
 
 }
 
-export default LoginFormPageObject;
+export default CommonPage;

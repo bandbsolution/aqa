@@ -1,8 +1,8 @@
-import MainPagePageObject from "../support/pages/MainPage.pageObject";
-import LoginFormPageObject from "../support/pages/LoginForm.pageObject";
+import MainPage from "../../support/pages/MainPage";
+import LoginModal from "../../support/modals/LoginModal";
 
-const mainPage = new MainPagePageObject;
-const loginForm = new LoginFormPageObject;
+const mainPage = new MainPage;
+const loginForm = new LoginModal;
 const expectedTexts = [
     'Підтримуй та плекай українське – воно душу й серце гріє.',
     'Знайом зі своїм продуктом, бо він того вартий.',
@@ -14,9 +14,11 @@ const expectedTexts = [
 
 describe('smoke test for unauthorized user', () => {
     it('Main page functional', () => {
+
         mainPage.visit();
         mainPage.assertUrl(Cypress.config('baseUrl'));
         mainPage.assertTitle('BONFAIR');
+
         mainPage.validateAdvice1();
         mainPage.validateAdvice2();
         mainPage.validateAdvice3();
@@ -24,8 +26,7 @@ describe('smoke test for unauthorized user', () => {
         mainPage.assertModalWindow();
         loginForm.loginBtn.should('be.disabled')
         mainPage.closeModal();
-        mainPage.clickOnSupportLinkinFooter();
-        // cy.wait(10000);
+        mainPage.clickOnSupportLinkInFooter();
     })
     it('Carousel Test', () =>{
         mainPage.visit();
