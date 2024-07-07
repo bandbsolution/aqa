@@ -12,17 +12,17 @@ class SearchPage extends PageObject {
 
     clickOnPosts() {
         cy.get('span').contains('Пости').click();
-        cy.wait(5000);
+        this.waitFoDataLoad();
     }
 
     clickOnPeople() {
         cy.get('span').contains('Люди').click();
-        cy.wait(5000);
+        this.waitFoDataLoad();
     }
 
     applyFilters() {
         cy.get('button').contains('Застосувати фільтри').click();
-        cy.wait(5000);
+        this.waitFoDataLoad();
     }
 
     availableCheckBox() {

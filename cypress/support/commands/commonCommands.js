@@ -1,10 +1,29 @@
 import 'cypress-file-upload';
 
+const { MailSlurp } = require('mailslurp-client');
+const mailslurp = new MailSlurp({ apiKey: Cypress.env('MAILSLURP_API_KEY') });
+
+Cypress.Commands.add('createInbox', () => {
+    return mailslurp.createInbox();
+});
+
+Cypress.Commands.add('waitForLatestEmail', (inboxId) => {
+    const timeoutMillis = 30_000;
+    return mailslurp.waitForLatestEmail(inboxId, timeoutMillis);
+});
+
+Cypress.Commands.add('emailCount', (inboxId) => {
+    return mailslurp.inboxController.getInboxEmailCount({ inboxId: inboxId });
+});
+
+Cypress.Commands.add('deleteAllEmails', () => {
+    return mailslurp.emailController.deleteAllEmails();
+});
+
 Cypress.Commands.add('selectDropdownOption', (dropdownName, optionText) => {
     cy.get(`input[placeholder="${dropdownName}"]`).click();
     cy.get('.MuiAutocomplete-listbox li').contains(optionText).click();
 });
-
 
 function base64ToBlob(base64, type) {
     const binary = atob(base64);
@@ -16,11 +35,9 @@ function base64ToBlob(base64, type) {
 }
 
 Cypress.Commands.add('uploadAndSavePhoto', (fileName) => {
-    // Убедитесь, что элемент input[type="file"] существует
     cy.get('input#button-file-service').should('exist');
 
-    // Использование команды для загрузки файла
-    cy.readFile(`cypress/fixtures/${fileName}`, 'base64').then(fileContent => {
+    cy.readFile(`cypress/fixtures/${fileName}`, 'base64').then((fileContent) => {
         const mimeType = `image/${fileName.split('.').pop()}`;
         const blob = base64ToBlob(fileContent, mimeType);
         const file = new File([blob], fileName, { type: mimeType });
@@ -28,7 +45,7 @@ Cypress.Commands.add('uploadAndSavePhoto', (fileName) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         cy.wait(2000);
-        cy.window().then(win => {
+        cy.window().then((win) => {
             const input = win.document.getElementById('button-file-service');
             if (input) {
                 const fileList = [file];
@@ -41,7 +58,6 @@ Cypress.Commands.add('uploadAndSavePhoto', (fileName) => {
                 cy.wait(2000);
                 input.dispatchEvent(changeEvent);
                 cy.wait(2000);
-                // Проверка, что файл был успешно загружен в элемент input
                 const files = input.files;
                 cy.log(`Number of files after upload: ${files.length}`);
                 if (files.length > 0) {
@@ -60,14 +76,11 @@ Cypress.Commands.add('uploadAndSavePhoto', (fileName) => {
         });
     });
 
-    // Ожидание появления загруженного изображения перед сохранением
-    cy.get('.reactEasyCrop_Image')
-        .should('have.attr', 'src')
-    cy.get('button').contains('Зберегти зміни').click({force: true});
+    cy.get('.reactEasyCrop_Image').should('have.attr', 'src');
+    cy.get('button').contains('Зберегти зміни').click({ force: true });
     // Использование cy.window() для обращения к кнопке и выполнения клика
-    cy.window().then(win => {
-        const saveButton = Array.from(win.document.querySelectorAll('button'))
-            .find(button => button.textContent.includes('Зберегти зміни'));
+    cy.window().then((win) => {
+        const saveButton = Array.from(win.document.querySelectorAll('button')).find((button) => button.textContent.includes('Зберегти зміни'));
         if (saveButton) {
             cy.log('Found save button');
             saveButton.click();
@@ -77,8 +90,7 @@ Cypress.Commands.add('uploadAndSavePhoto', (fileName) => {
         }
     });
 
-    // Дополнительная проверка после сохранения
-    cy.window().then(win => {
+    cy.window().then((win) => {
         const input = win.document.getElementById('button-file-service');
         if (input) {
             const files = input.files;

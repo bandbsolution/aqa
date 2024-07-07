@@ -1,6 +1,6 @@
 import PageObject from '../PageObject';
 
-class RegisterModal extends PageObject {
+class AuthModals extends PageObject {
 
     get nameField() {
         return cy.get('[name="name"]');
@@ -26,27 +26,17 @@ class RegisterModal extends PageObject {
         return cy.get('[name="confirmPassword"]');
     }
 
-    get seePassIcon() {
-        return cy.get('[data-testid="VisibilityIcon"]')
+    get codeField() {
+        return cy.get('[name="verify"]');
     }
 
-    get alreadyRegisteredLink() {
-        return cy.get('.modal-link-btn').contains('Уже з нами?')
+    typeCode(code) {
+        this.codeField.type(code, { force: true });
     }
-
-    get resetPassLink() {
-        return cy.get('.modal-link-btn').contains('Забули пароль?')
-    }
-
-    get closeModal() {
-        return cy.get('[data-testid="CloseIcon"]')
-
-      }
 
     typeName(name) {
         this.nameField.type(name, { force: true });
     }
-
 
     typeSurname(surName) {
         this.surnameField.type(surName, { force: true });
@@ -69,23 +59,27 @@ class RegisterModal extends PageObject {
     }
 
     clickOnSeePassIcon() {
-        this.seePassIcon.click();
+        cy.get('[data-testid="VisibilityIcon"]');
+    }
+
+    clickOnAlreadyRegisteredLink() {
+        cy.get('.modal-link-btn').contains('Уже з нами?');
     }
 
     clickOnLoginBtn() {
-        this.loginBtn.click();
+        cy.get('#loginBtn').contains('Увійти').click();
     }
 
     clickOnCreateAcc() {
-        this.createLink.click();
+        cy.get('.modal-link-btn').contains('Створити обліковий запис').click();
     }
 
     clickOnResetPass() {
-        this.resetPassLink.click();
+        cy.get('.modal-link-btn').contains('Забули пароль?').click();
     }
 
     clickClosModal() {
-        this.closeModal.click();
+        cy.get('[data-testid="CloseIcon"]').click();
     }
 
     agreeRegisterCheckbox() {
@@ -95,6 +89,14 @@ class RegisterModal extends PageObject {
     clickOnRegisterButton() {
         cy.get('#loginBtn').contains('Зареєструватись').click({force: true});
     }
+
+    clickOnContinueButton() {
+        cy.get('button').contains('Продовжити').click();
+    }
+
+    clickOnAgreeButton() {
+        cy.get('button').contains('Підтвердити').click();
+    }
 }
 
-export default RegisterModal;
+export default AuthModals;

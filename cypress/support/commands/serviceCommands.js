@@ -1,6 +1,6 @@
-import ServiceModal from "../modals/ServiceModal";
+import ServiceModal from '../modals/ServiceModal';
 import { faker } from '@faker-js/faker';
-import MyProfile from "../pages/MyProfile";
+import MyProfile from '../pages/MyProfile';
 
 const serviceModal = new ServiceModal;
 const myProfile = new MyProfile;
@@ -14,7 +14,7 @@ const categories = [
     'Товари для дому',
     'Флористика',
     'Товари для дітей',
-    'Інше'
+    'Інше',
 ];
 
 const initOfMeasures = ['г', 'кг', 'мл', 'л', 'см', 'м', 'шт', '-'];
@@ -26,12 +26,15 @@ function getRandomElement(arr) {
 
 Cypress.Commands.add('createService', () => {
     const category = getRandomElement(categories);
-    const initOfMeasure = getRandomElement(initOfMeasures)
+    const initOfMeasure = getRandomElement(initOfMeasures);
     const serviceName = faker.commerce.productName();
-    const price = faker.commerce.price({min: 1, max: 99999});
+    const price = faker.commerce.price({ min: 1, max: 99999 });
     const description = faker.commerce.productDescription();
-
+    cy.wait(5000);
     cy.get('span').contains('Послуги').click();
+    cy.scrollTo('top');
+    myProfile.waitFoDataLoad();
+    cy.wait(5000);
     myProfile.clickOnCreateServiceOrPostIf0();
     // cy.get('button').contains('Створити послугу').click();
     serviceModal.typeNameService(serviceName);
@@ -45,11 +48,39 @@ Cypress.Commands.add('createService', () => {
 
     serviceModal.novaPoshtaCheckBox();
     serviceModal.povnaOplataCheckBox();
-    cy.selectDropdownOption('Дні відправки*', 'Щодня')
+    cy.selectDropdownOption('Дні відправки*', 'Щодня');
     serviceModal.typeDaysService(1);
     serviceModal.clickOnCreateServiceBtn();
-    serviceModal.assertNotification('Послугу успішно створено')
+    serviceModal.assertNotification('Послугу успішно створено');
 
     return cy.wrap({ serviceName, category, price, description, initOfMeasure });
+});
 
+Cypress.Commands.add('orderService', () => {
+    cy.get('[name="buyerNumber"]').type('959595959');
+    cy.get('div[role="radiogroup"]')
+        .first()
+        .within(() => {
+            cy.get('input[type="radio"]').eq(0).click();
+        });
+    cy.get('div[role="radiogroup"]')
+        .eq(1)
+        .first()
+        .within(() => {
+            cy.get('input[type="radio"]').eq(0).click();
+        });
+    cy.get('[role="combobox"]').eq(0).type('Київська', {force: true});
+    cy.contains('Київська').click();
+    cy.get('[role="combobox"]').eq(1).type('Андріївка', {force: true});
+    cy.contains('Андріївка').click();
+    cy.get('[name="department"]').type('2', {force: true});
+    cy.get('button').contains('Замовити').click();
+});
+
+Cypress.Commands.add('leaveFeedback', (textOfFeedback) => {
+    myProfile.waitFoDataLoad();
+    cy.get('button').contains('Залишити відгук').click();
+    cy.get('[placeholder="Опиши більш детально свої враження. Нам дійсно важлива твоя думка!"]').type(textOfFeedback);
+    cy.get('input[type="radio"]').eq(0).click({ force: true });
+    cy.get('button').contains('Опублікувати відгук').click({ force: true });
 });
