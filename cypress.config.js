@@ -5,7 +5,7 @@ module.exports = defineConfig({
     viewportWidth: 1920,
     watchForFileChanges: false,
     defaultCommandTimeout: 6000,
-    numTestsKeptInMemory: 3,
+    numTestsKeptInMemory: 0,
     experimentalMemoryManagement: true,
     chromeWebSecurity: false,
     reporter: 'mochawesome',

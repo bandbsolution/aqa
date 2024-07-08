@@ -79,7 +79,7 @@ class AuthModals extends PageObject {
     }
 
     clickClosModal() {
-        cy.get('[data-testid="CloseIcon"]').click();
+        cy.get('[data-testid="CloseIcon"]').click({waitForAnimations: false});
     }
 
     agreeRegisterCheckbox() {
