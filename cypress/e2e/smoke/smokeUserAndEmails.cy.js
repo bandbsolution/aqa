@@ -53,7 +53,7 @@ describe('create and activate user, change password, change email', () => {
     it('activate account via link in email', () => {
         cy.waitForLatestEmail(inboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Activation link', 'Email subject is correct');
+            assert.strictEqual(email.subject, 'Посилання для активації', 'Email subject is correct');
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
                 .replace(/\s\s+/g, ' ')
@@ -103,7 +103,7 @@ describe('create and activate user, change password, change email', () => {
 
         cy.waitForLatestEmail(inboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Activation code', 'Email subject is correct');
+            assert.strictEqual(email.subject, 'Код активації', 'Email subject is correct');
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
                 .replace(/\s\s+/g, ' ')
@@ -165,7 +165,7 @@ describe('create and activate user, change password, change email', () => {
 
         cy.waitForLatestEmail(inboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Time code', 'Email subject is correct');
+            assert.strictEqual(email.subject, 'Таймкод', 'Email subject is correct');
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
@@ -227,7 +227,7 @@ describe('create and activate user, change password, change email', () => {
 
         cy.waitForLatestEmail(secondInboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Update email', 'Email subject is correct');
+            assert.strictEqual(email.subject, 'Оновлення електронної пошти', 'Email subject is correct');
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')

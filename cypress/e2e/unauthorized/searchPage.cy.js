@@ -11,7 +11,9 @@ describe('smoke search page for unauthorized user', () => {
         searchPage.availableCheckBox();
         searchPage.applyFilters();
         searchPage.clickOnPeople();
+        cy.wait(3000);
         searchPage.clickOnPosts();
+        cy.wait(3000);
         searchPage.sorting('input[role="combobox"]', 'Спочатку нові');
     })
 })

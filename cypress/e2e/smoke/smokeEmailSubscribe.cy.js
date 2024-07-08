@@ -69,7 +69,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
 
             cy.waitForLatestEmail(inboxId).then((email) => {
                 assert.isDefined(email);
-                assert.strictEqual(email.subject, 'Activation link', `Received subject was: ${email.subject}`);
+                assert.strictEqual(email.subject, 'Посилання для активації', `Received subject was: ${email.subject}`);
                 activationLink = email.body.match(/href="(https:\/\/[^"]+?isActive=[^"]+)"/)[1];
                 cy.visit(activationLink);
                 authModals.assertNotification('Акаунт успішно активовано', { timeout: 50000 });
@@ -100,7 +100,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
 
             cy.waitForLatestEmail(secondInboxId).then((email) => {
                 assert.isDefined(email);
-                assert.strictEqual(email.subject, 'Activation link', `Received subject was: ${email.subject}`);
+                assert.strictEqual(email.subject, 'Посилання для активації', `Received subject was: ${email.subject}`);
                 secondActivationLink = email.body.match(/href="(https:\/\/[^"]+?isActive=[^"]+)"/)[1];
                 cy.visit(secondActivationLink);
                 authModals.assertNotification('Акаунт успішно активовано', { timeout: 50000 });
@@ -135,7 +135,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
         cy.orderService();
         cy.waitForLatestEmail(inboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'New Order', `Received subject was: ${email.subject}`);
+            assert.strictEqual(email.subject, 'Нове замовлення', `Received subject was: ${email.subject}`);
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
@@ -156,7 +156,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
         cy.leaveFeedback('12345');
         cy.waitForLatestEmail(inboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'New Feedback', `Received subject was: ${email.subject}`);
+            assert.strictEqual(email.subject, 'Новий відгук', `Received subject was: ${email.subject}`);
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
@@ -178,7 +178,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
         authModals.chooseStatusOfOrder(Statuses.IN_PROGRESS);
         cy.waitForLatestEmail(secondInboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Changed status order', `Received subject was: ${email.subject}`);
+            assert.strictEqual(email.subject, 'Зміна статусу замовлення', `Received subject was: ${email.subject}`);
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
@@ -194,7 +194,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
         authModals.chooseStatusOfOrder(Statuses.SENT);
         cy.waitForLatestEmail(secondInboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Changed status order', `Received subject was: ${email.subject}`);
+            assert.strictEqual(email.subject, 'Зміна статусу замовлення', `Received subject was: ${email.subject}`);
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
@@ -210,7 +210,7 @@ describe('get emails: change status of order, leave feedback, new order', () => 
         authModals.chooseStatusOfOrder(Statuses.DELIVERED);
         cy.waitForLatestEmail(secondInboxId).then((email) => {
             assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Changed status order', `Received subject was: ${email.subject}`);
+            assert.strictEqual(email.subject, 'Зміна статусу замовлення', `Received subject was: ${email.subject}`);
 
             const plainTextBody = email.body
                 .replace(/<[^>]*>/g, ' ')
