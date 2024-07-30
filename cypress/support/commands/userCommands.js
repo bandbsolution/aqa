@@ -37,12 +37,6 @@ Cypress.Commands.add('createUser', (id) => {
     const surname = faker.person.lastName();
     const nickname = faker.internet.userName();
 
-    Cypress.env(`${id}UserEmail`, email);
-    Cypress.env(`${id}UserPassword`, password);
-    Cypress.env(`${id}UserName`, name);
-    Cypress.env(`${id}UserSurname`, surname);
-    Cypress.env(`${id}UserNickname`, nickname);
-
     mainPage.visit();
     mainPage.openLoginModal();
     authModals.clickOnCreateAcc();
@@ -54,25 +48,24 @@ Cypress.Commands.add('createUser', (id) => {
     authModals.typeConfirmPassword(password);
     authModals.agreeRegisterCheckbox();
     authModals.clickOnRegisterButton();
+    authModals.assertSuccessRegisterAccount();
+
+    return cy.wrap({ email, password, name, surname, nickname });
 });
 
 Cypress.Commands.add('activateAccount', (email) => {
-     email = Cypress.env(email);
-    if (!email) {
-        throw new Error('Email not found in env');
-    }
-
     const encodedEmail = btoa(email);
     const activationUrl = `https://dev.bonfairplace.com?isActive=${encodedEmail}`;
-
     cy.visit(activationUrl);
-    mainPage.assertNotification('Акаунт успішно активовано', {timeout: 50000});
+    cy.wait(500);
+    mainPage.assertNotification('Акаунт успішно активовано');
 });
 
 Cypress.Commands.add('deleteAccount', (password) => {
     mainPage.choseMenuInSettings(SettingsMenu.SettingsAccount, SettingsMenuBlocks.DeleteAccount);
     cy.wait(3000);
-    cy.get('[type="password"]', {timeout: 5000}).type(password, {force: true});
+    cy.iframe('#accSettingsPage').find('button').contains('Видалити акаунт').should('be.visible').click({force: true});
+    cy.get('[type="password"]').type(password, {force: true});
     cy.get('button').contains('Видалити').click({force: true});
     cy.wait(1000);
     mainPage.assertNotification('Акаунт успішно видалено');
@@ -80,7 +73,7 @@ Cypress.Commands.add('deleteAccount', (password) => {
 });
 
 Cypress.Commands.add('login', (email, password) => {
-    authModals.visit()
+    authModals.visit();
     mainPage.openLoginModal();
     authModals.typeEmail(email);
     authModals.typePassword(password);

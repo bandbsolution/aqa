@@ -13,7 +13,9 @@ function checkEmailSubscriptionsByDefault() {
 
 function turnOffEmailSubscriptions() {
     cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').eq(0).click();
+    cy.wait(1000);
     cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').eq(1).click();
+    cy.wait(1000);
     cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').eq(2).click();
 
     cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').eq(0).should('not.be.checked');

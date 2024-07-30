@@ -9,6 +9,7 @@ class PageObject {
 
     visit() {
         cy.visit(Cypress.config('baseUrl'));
+        cy.wait(1000);
     }
 
     assertUrl(expectedUrl) {
@@ -20,19 +21,18 @@ class PageObject {
     }
 
     assertSuccessRegisterAccount() {
-        cy.contains('Підтвердження електронної пошти', {timeout: 6000});
-        cy.contains(
-            'На вказану Вами електронну пошту, було надіслано листа з підвердженням реєстрації. Будь ласка, перевірте Вашу поштову скриньку.', {timeout: 6000}
-        );
+        this.waitFoDataLoad();
+        cy.contains('Підтвердження електронної пошти');
+        cy.contains('На вказану Вами електронну пошту, було надіслано листа з підвердженням реєстрації. Будь ласка, перевірте Вашу поштову скриньку.');
     }
 
     assertNotification(notificationMessage) {
-        cy.get('#notistack-snackbar', { timeout: 3000 }).should('be.visible').and('have.text', notificationMessage);
+        cy.get('#notistack-snackbar').should('be.visible').and('have.text', notificationMessage);
     }
 
     openLoginModal() {
-        cy.get('[data-testid="PermIdentityIcon"]', { timeout: 50000 }).should('exist');
-        cy.get('[data-testid="PermIdentityIcon"]', { timeout: 50000 }).should('be.visible').click();
+        cy.get('button').contains('Увійти').click({force: true});
+        this.waitFoDataLoad();
     }
 
     openSearchPage() {
@@ -71,10 +71,12 @@ class PageObject {
 
     chooseInSwitcher(object) {
         cy.get('span').contains(object).click();
+        this.waitFoDataLoad();
     }
 
     waitFoDataLoad() {
-        cy.get('.spinner', {timeout: 7000}).should('not.exist');
+        cy.wait(1000);
+        cy.get('.spinner').should('not.exist');
     }
 
     checkSupportLink(emailBody) {
@@ -85,13 +87,18 @@ class PageObject {
 
     choseMenuInSettings(leftBlock, subBlock) {
         this.navigateToMenuItem(ProfileActions.SETTINGS);
-        cy.frameLoaded('#accSettingsPage');
-        cy.iframe('#accSettingsPage').find('button').contains(leftBlock).click({ force: true });
+        cy.frameLoaded('#accSettingsPage').should('be.visible');
+        cy.iframe('#accSettingsPage').find('button').contains(leftBlock).should('be.visible').click({ force: true });
         cy.iframe('#accSettingsPage').find('span').contains(subBlock).should('be.visible').click({ force: true });
     }
 
     openScheduler() {
         cy.get('[data-testid="DateRangeIcon"]').click();
+    }
+
+    openNotification() {
+        cy.get('[aria-label="Сповіщення"]').click();
+        cy.wait(1000);
     }
 
     chooseStatusOfOrder(status) {

@@ -67,7 +67,7 @@ class AuthModals extends PageObject {
     }
 
     clickOnLoginBtn() {
-        cy.get('#loginBtn').contains('Увійти').click();
+        cy.get('#loginBtn').contains('Увійти').click({force: true});
     }
 
     clickOnCreateAcc() {

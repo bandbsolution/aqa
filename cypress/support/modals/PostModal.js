@@ -23,11 +23,6 @@ class PostModal extends PageObject {
         cy.get('li').contains(action).click({force: true});
     }
 
-    actionsWithReplyOnComment(action) {
-        cy.get('[data-testid="MoreVertIcon"]').eq(2).click({force: true});
-        cy.get('li').contains(action).click({force: true});
-    }
-
     like(index){
         cy.get('[data-testid="FavoriteBorderIcon"]').eq(index).click();
         cy.get('[data-testid="FavoriteIcon"]', {timeout: 5000}).should('be.visible');

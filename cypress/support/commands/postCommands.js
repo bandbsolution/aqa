@@ -7,18 +7,19 @@ const postModal = new PostModal;
 const myProfile = new MyProfile;
 
 Cypress.Commands.add('createPost', () => {
-    const randomPostText = faker.lorem.paragraph({min: 5, max: 10});
+    const randomPostText = faker.lorem.paragraph({min: 8, max: 10});
 
     myProfile.clickOnCreateServiceOrPostIf0();
     postModal.typeTextPost(randomPostText);
     postModal.clickOnCreatePostBtn();
     postModal.assertNotification('Пост успішно створено');
+    postModal.waitFoDataLoad();
 
     return cy.wrap({ randomPostText });
 });
 
 Cypress.Commands.add('editPost', () => {
-    const randomEditedPostText = faker.lorem.paragraph({min: 5, max: 10});
+    const randomEditedPostText = faker.lorem.paragraph({min: 8, max: 10});
 
     postModal.performPostActions(PostActions.EDIT);
     postModal.textPostField.clear();

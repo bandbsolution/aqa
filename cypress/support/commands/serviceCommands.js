@@ -76,8 +76,8 @@ Cypress.Commands.add('orderService', () => {
     cy.get('[name="department"]').type('2', {force: true});
     cy.get('button').contains('Замовити').click();
 });
-
-Cypress.Commands.add('leaveFeedback', (textOfFeedback) => {
+//score eq(n) - 0,1,2,3,4 (1,2,3,4,5)
+Cypress.Commands.add('leaveFeedback', (textOfFeedback, score) => {
     myProfile.waitFoDataLoad();
     cy.get('button').contains('Залишити відгук').click();
     cy.get('[placeholder="Опиши більш детально свої враження. Нам дійсно важлива твоя думка!"]').type(textOfFeedback);

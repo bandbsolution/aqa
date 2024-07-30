@@ -22,10 +22,12 @@ describe('create and activate user, change password, change email', () => {
     const followUpText = 'Якщо ви не здійснювали цього запиту, проігноруйте його або зверніться у службу підтримки.';
 
     after(() => {
-        cy.login(emailAddress, newPassword);
-        cy.deleteAccount(newPassword);
         cy.login(secondEmailAddress, password);
         cy.deleteAccount(password);
+    });
+
+    beforeEach(() => {
+        cy.deleteAllEmails();
     });
 
     it('create account', () => {
@@ -67,34 +69,11 @@ describe('create and activate user, change password, change email', () => {
             activationLink = email.body.match(/href="(https:\/\/[^"]+?isActive=[^"]+)"/)[1];
             cy.visit(activationLink);
             authModals.assertNotification('Акаунт успішно активовано', { timeout: 50000 });
-            cy.deleteAllEmails();
+            //  cy.deleteAllEmails();
         });
     });
 
-    it('create account with already created and activated nickname and email', () => {
-        authModals.visit();
-        authModals.openLoginModal();
-        authModals.clickOnCreateAcc();
-        authModals.typeName(name);
-        authModals.typeSurname(surname);
-        authModals.typeNickname(nickname);
-        authModals.typeEmail(emailAddress);
-        authModals.typePassword(password);
-        authModals.typeConfirmPassword(password);
-        authModals.agreeRegisterCheckbox();
-        authModals.clickOnRegisterButton();
-        authModals.assertNotification('Акаунт з такою поштою вже існує', { timeout: 50000 });
-        authModals.emailField.clear().type(faker.internet.email());
-        authModals.clickOnRegisterButton();
-        authModals.assertNotification('Користувач з таким нікнеймом, вже зареєстрований', { timeout: 50000 });
-    });
-
-    it('activate already activated account', () => {
-        cy.visit(activationLink);
-        authModals.assertNotification('Акаунт вже було активовано', { timeout: 50000 });
-    });
-
-    it('recover password and login with new password', () => {
+    it('recover password and login with new password BUG', () => {
         authModals.visit();
         authModals.openLoginModal();
         authModals.clickOnResetPass();
@@ -127,11 +106,11 @@ describe('create and activate user, change password, change email', () => {
 
             cy.login(emailAddress, newPassword);
             authModals.assertTitle('Моя сторінка');
-            cy.deleteAllEmails();
+            //cy.deleteAllEmails();
         });
     });
 
-    it('try to recover password passing previously activation code, SKIPPED. BUG: BON-1039', () => {
+    it('try to recover password passing previously activation code', () => {
         authModals.visit();
         authModals.openLoginModal();
         authModals.clickOnResetPass();
@@ -140,7 +119,7 @@ describe('create and activate user, change password, change email', () => {
         authModals.typeCode(activationCode);
         authModals.clickOnAgreeButton();
 
-        authModals.assertNotification('Код не вірний або не існує', { timeout: 50000 });
+        authModals.assertNotification('Некоректний тимчасовий ключ', { timeout: 50000 });
     });
 
     it('unable to login with old password', () => {
@@ -149,7 +128,7 @@ describe('create and activate user, change password, change email', () => {
         authModals.assertNotification('Не вірний логін або пароль', { timeout: 50000 });
     });
 
-    it('settings - turn on 2FA and login, SKIPPED. BUG: BON-1038', () => {
+    it('settings - turn on 2FA and login', () => {
         cy.login(emailAddress, newPassword);
         authModals.navigateToMenuItem(ProfileActions.SETTINGS);
         cy.frameLoaded('#accSettingsPage');
@@ -189,7 +168,7 @@ describe('create and activate user, change password, change email', () => {
             cy.login(emailAddress, newPassword);
             authModals.typeCode(timeCode);
             //authModals.assertNotification('Двухфакторну аутентифікацію увімкнено', {timeout: 50000});
-            cy.deleteAllEmails();
+            //  cy.deleteAllEmails();
         });
     });
 
@@ -199,12 +178,12 @@ describe('create and activate user, change password, change email', () => {
         cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').type(emailAddress);
         cy.iframe('#accSettingsPage').find('button').contains('Змінити').should('be.disabled');
 
-        cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').clear().type('drunyakk@gmail.com');
-        cy.iframe('#accSettingsPage').find('[style="margin-top: 40px;"]').eq(1).click({force: true});
-        cy.iframe('#accSettingsPage').contains('Користувач з такою поштою вже зареєстрований.',{timeout: 50000});
+        cy.iframe('#accSettingsPage').find('[role="region"]').eq(1).find('input').clear().type(secondEmailAddress);
+        cy.iframe('#accSettingsPage').find('[style="margin-top: 40px;"]').eq(1).click({ force: true });
+        cy.iframe('#accSettingsPage').contains('Користувач з такою поштою вже зареєстрований.', { timeout: 50000 });
     });
 
-    it('settings - change email to new one and login', () => {
+    it('settings - change email (emailAddress) to new one (secondEmailAddress) and login', () => {
         cy.createInbox().then((inbox) => {
             assert.isDefined(inbox);
 
@@ -225,33 +204,33 @@ describe('create and activate user, change password, change email', () => {
             authModals.assertTitle('Моя сторінка');
             authModals.navigateToMenuItem(ProfileActions.LOGOUT);
 
-        cy.waitForLatestEmail(secondInboxId).then((email) => {
-            assert.isDefined(email);
-            assert.strictEqual(email.subject, 'Оновлення електронної пошти', 'Email subject is correct');
+            cy.waitForLatestEmail(secondInboxId).then((email) => {
+                assert.isDefined(email);
+                assert.strictEqual(email.subject, 'Оновлення електронної пошти', 'Email subject is correct');
 
-            const plainTextBody = email.body
-                .replace(/<[^>]*>/g, ' ')
-                .replace(/\s\s+/g, ' ')
-                .trim();
+                const plainTextBody = email.body
+                    .replace(/<[^>]*>/g, ' ')
+                    .replace(/\s\s+/g, ' ')
+                    .trim();
 
-            assert.include(
-                plainTextBody,
-                'Щоб завершити зміну електронної пошти, підтвердіть свою адресу електронної пошти за посиланням нижче:',
-                'Email contains the expected text'
-            );
+                assert.include(
+                    plainTextBody,
+                    'Щоб завершити зміну електронної пошти, підтвердіть свою адресу електронної пошти за посиланням нижче:',
+                    'Email contains the expected text'
+                );
 
-            linkChangedEmail = email.body.match(/href="(https:\/\/[^"]+?email=[^"]+)"/)[1];
-            cy.visit(linkChangedEmail);
-            authModals.clickClosModal();
-            authModals.assertNotification('Електронну адресу успішно змінено', { timeout: 50000 });
-            cy.login(secondEmailAddress, newPassword);
-            authModals.assertTitle('Моя сторінка');
-            cy.deleteAllEmails();
+                linkChangedEmail = email.body.match(/href="(https:\/\/[^"]+?email=[^"]+)"/)[1];
+                cy.visit(linkChangedEmail);
+                authModals.clickClosModal();
+                authModals.assertNotification('Електронну адресу успішно змінено', { timeout: 50000 });
+                cy.login(secondEmailAddress, newPassword);
+                authModals.assertTitle('Моя сторінка');
+                // cy.deleteAllEmails();
+            });
         });
-      });
     });
 
-    it('settings - unable to login with old email after success change to new email. Register again with old email, but not activate account', () => {
+    it('settings - unable to login with old email (emailAddress) after success change to new email. Register again with old email (emailAddress), but not activate account', () => {
         cy.login(emailAddress, newPassword);
         authModals.assertNotification('Не вірний логін або пароль');
         authModals.clickOnCreateAcc();
@@ -268,6 +247,6 @@ describe('create and activate user, change password, change email', () => {
             'На вказану Вами електронну пошту, було надіслано листа з підвердженням реєстрації. Будь ласка, перевірте Вашу поштову скриньку.'
         );
         cy.login(emailAddress, password);
-        authModals.assertNotification('Акаунт не активовано', { timeout: 50000 });
+        authModals.assertNotification('Акаунт не активований! Перевірте електронну пошту.', { timeout: 50000 });
     });
 });

@@ -15,19 +15,19 @@ class CommonPage extends PageObject {
     }
 
     get loginBtn() {
-        return cy.get('button').contains('Відправити')
+        return cy.get('button').contains('Відправити');
     }
 
     get seePassIcon() {
-        return cy.get('[data-testid="VisibilityIcon"]')
+        return cy.get('[data-testid="VisibilityIcon"]');
     }
 
     get createLink() {
-        return cy.get('.modal-link-btn').contains('Створити обліковий запис')
+        return cy.get('.modal-link-btn').contains('Створити обліковий запис');
     }
 
     get resetPassLink() {
-        return cy.get('.modal-link-btn').contains('Забули пароль?')
+        return cy.get('.modal-link-btn').contains('Забули пароль?');
     }
 
     typeEmail(email) {
