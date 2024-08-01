@@ -20,7 +20,7 @@ describe('support page', () => {
         cy.get('.footer-address-text').should('not.exist');
     });
 
-    it('validation message for: max length field, correct email', () => {
+    it('validation message for max length field, correct email', () => {
         supportPage.visit();
         supportPage.clickOnSupportLinkInFooter();
         supportPage.typeName('a'.repeat(101));
