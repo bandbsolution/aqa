@@ -9,3 +9,4 @@ node_modules
 mochawesome-report
 results
 .idea
+package-lock.json
