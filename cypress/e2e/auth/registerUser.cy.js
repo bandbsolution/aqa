@@ -1,15 +1,17 @@
 import { faker } from '@faker-js/faker';
-import AuthModals from '../support/modals/AuthModals';
+import AuthModals from '../../support/modals/AuthModals';
+import { createUser, setupUser } from '../../support/helper';
+import { ProfileActions } from '../../support/enums';
 
 const authModals = new AuthModals();
 
-describe('register user functional', () => {
+describe('register user functional (modal)', () => {
     let userDataFirst;
 
     before(() => {
-        cy.createUser('first').then((user) => {
-            cy.activateAccount(user.email);
-            userDataFirst = user;
+        setupUser().then((data) => {
+            userDataFirst = data.userData;
+            authModals.navigateToMenuItem(ProfileActions.LOGOUT);
         });
     });
 
@@ -18,7 +20,7 @@ describe('register user functional', () => {
         cy.deleteAccount(userDataFirst.password);
     });
 
-    it('validation errors for fields - correct values', () => {
+    it('validation errors for fields - should be correct values', () => {
         authModals.visit();
         authModals.openLoginModal();
         authModals.clickOnCreateAcc();
@@ -69,7 +71,6 @@ describe('register user functional', () => {
         cy.get('[name="password"]').clear();
         cy.get('body').click();
 
-
         cy.get('form').within(() => {
             cy.get('div')
                 .filter((index, el) => el.innerText.trim() === "Це поле обов'язкове")
@@ -92,7 +93,7 @@ describe('register user functional', () => {
 
         cy.get('form').within(() => {
             cy.get('div')
-                .filter((index, el) => el.innerText.trim() === "Мінімально 2 символи")
+                .filter((index, el) => el.innerText.trim() === 'Мінімально 2 символи')
                 .should('have.length', 3)
                 .each(($el, index) => {
                     cy.wrap($el).should('be.visible');
@@ -102,17 +103,8 @@ describe('register user functional', () => {
     });
 
     it('create account with already created and activated nickname and email', () => {
-        authModals.visit();
-        authModals.openLoginModal();
-        authModals.clickOnCreateAcc();
-        authModals.typeName('Just');
-        authModals.typeSurname('Test');
-        authModals.typeNickname(userDataFirst.nickname);
-        authModals.typeEmail(userDataFirst.email);
-        authModals.typePassword('12345678aA');
-        authModals.typeConfirmPassword('12345678aA');
-        authModals.agreeRegisterCheckbox();
-        authModals.clickOnRegisterButton();
+        createUser(userDataFirst.email, userDataFirst.nickname, false);
+
         authModals.assertNotification('Акаунт з такою поштою вже існує', { timeout: 50000 });
         cy.get('.SnackbarItem-action').click();
         authModals.emailField.clear().type(faker.internet.email());
@@ -122,9 +114,16 @@ describe('register user functional', () => {
 
     it('activate already activated account', () => {
         const encodedEmail = btoa(userDataFirst.email);
-        const correctUrl = Cypress.config('baseUrl').replace('/ua','');
+        const correctUrl = Cypress.config('baseUrl').replace('/ua', '');
         const activationUrl = `${correctUrl}?isActive=${encodedEmail}`;
         cy.visit(activationUrl);
         authModals.assertNotification('Акаунт вже було активовано', { timeout: 50000 });
+    });
+
+    it('already registered link present in modal', () => {
+        authModals.visit();
+        authModals.openLoginModal();
+        authModals.clickOnCreateAcc();
+        cy.get('.modal-link-btn').contains('Уже з нами?').should('be.visible');
     });
 });
