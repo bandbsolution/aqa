@@ -35,7 +35,7 @@ describe('edit user functional', () => {
         cy.deleteAccount(userDataSecond.password);
     });
 
-    it('default values', () => {
+    it('assert default values', () => {
         cy.get('[data-testid="EditOutlinedIcon"]').click();
         cy.get('[name="name"]').should('have.value', userData.name);
         cy.get('[name="surname"]').should('have.value', userData.surname);
@@ -53,7 +53,7 @@ describe('edit user functional', () => {
             );
     });
 
-    it('edit user', () => {
+    it('success edit user', () => {
         cy.get('[data-testid="EditOutlinedIcon"]').click();
         cy.get('[name="name"]').clear().type(newName);
         cy.get('[name="surname"]').clear().type(newSurname);
