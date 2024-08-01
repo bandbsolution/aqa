@@ -82,10 +82,11 @@ describe('register user functional (modal)', () => {
         });
     });
 
-    it('min length for fields', () => {
+    it('min length for fields, agreement text is present', () => {
         authModals.visit();
         authModals.openLoginModal();
         authModals.clickOnCreateAcc();
+        cy.get('span').contains('користувальницької угоди.*').should('be.visible');
         cy.get('[name="name"]').type('a');
         cy.get('[name="surname"]').type('a');
         cy.get('[name="nickname"]').type('a');
