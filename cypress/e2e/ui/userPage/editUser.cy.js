@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import MyProfile from '../support/pages/MyProfile';
+import MyProfile from '../../../support/pages/MyProfile';
 
 const myProfile = new MyProfile();
 
