@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
 import MyProfile from '../../../support/pages/MyProfile';
+import { checkRequiredFields, setupUser } from '../../../support/helper';
+import { ProfileActions } from '../../../support/enums';
 
 const myProfile = new MyProfile();
 
@@ -13,13 +15,13 @@ describe('edit user functional', () => {
     let userDataSecond;
 
     before(() => {
-        cy.createUser('first').then((user) => {
-            cy.activateAccount(user.email);
-            userData = user;
+        setupUser().then((data) => {
+            userData = data.userData;
+            myProfile.navigateToMenuItem(ProfileActions.LOGOUT);
         });
-        cy.createUser('second').then((user) => {
-            cy.activateAccount(user.email);
-            userDataSecond = user;
+        setupUser().then((data) => {
+            userDataSecond = data.userData;
+            myProfile.navigateToMenuItem(ProfileActions.LOGOUT);
         });
     });
 
@@ -104,14 +106,6 @@ describe('edit user functional', () => {
         cy.get('[name="surname"]').clear();
         cy.get('body').click();
 
-        cy.get('form').within(() => {
-            cy.get('div')
-                .filter((index, el) => el.innerText.trim() === "Це поле обов'язкове")
-                .should('have.length', 3)
-                .each(($el, index) => {
-                    cy.wrap($el).should('be.visible');
-                    cy.log(`element: ${index}`);
-                });
-        });
+        checkRequiredFields(3);
     });
 });

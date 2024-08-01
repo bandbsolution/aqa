@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
-import AuthModals from '../../support/modals/AuthModals';
-import { checkRequiredFields, createUser, setupUser } from '../../support/helper';
-import { ProfileActions } from '../../support/enums';
+import AuthModals from '../../../support/modals/AuthModals';
+import { checkRequiredFields, createUser, setupUser } from '../../../support/helper';
+import { ProfileActions } from '../../../support/enums';
 
 const authModals = new AuthModals();
 
