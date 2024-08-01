@@ -1,0 +1,14 @@
+{
+    "estimatedTime": 1,
+    "price": 100,
+    "deliveryOption": "Нова Пошта",
+    "nameService": "Name for service test notify",
+    "deliveryDays": "Понеділок,Вівторок,Середа,Четвер,П'ятниця,Субота,Неділя",
+    "valueOfInitOfMeasure": "100",
+    "currency": "грн",
+    "availableQuantity": 100,
+    "initOfMeasure": "г",
+    "availability": "Є в наявності",
+    "paymentOption": "Повна оплата",
+    "category": "Їжа та напої"
+}
