@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import AuthModals from '../../support/modals/AuthModals';
-import { createUser, setupUser } from '../../support/helper';
+import { checkRequiredFields, createUser, setupUser } from '../../support/helper';
 import { ProfileActions } from '../../support/enums';
 
 const authModals = new AuthModals();
@@ -71,15 +71,7 @@ describe('register user functional (modal)', () => {
         cy.get('[name="password"]').clear();
         cy.get('body').click();
 
-        cy.get('form').within(() => {
-            cy.get('div')
-                .filter((index, el) => el.innerText.trim() === "Це поле обов'язкове")
-                .should('have.length', 6)
-                .each(($el, index) => {
-                    cy.wrap($el).should('be.visible');
-                    cy.log(`element: ${index}`);
-                });
-        });
+        checkRequiredFields(6);
     });
 
     it('min length for fields, agreement text is present', () => {
