@@ -1,30 +1,12 @@
 import MyProfile from '../../../support/pages/MyProfile';
-import { ProfileActions, SettingsMenu, SettingsMenuBlocks } from '../../../support/enums';
+import { ProfileActions } from '../../../support/enums';
 
 import { setupUser } from '../../../support/helper';
 import { authService, postsService } from '../../../api/services';
 
 const myProfile = new MyProfile();
 
-function disableAllNotifications() {
-    cy.iframe('#accSettingsPage')
-        .find('[role="region"]')
-        .eq(0)
-        .then(($region) => {
-            const inputs = $region.find('input');
-
-            inputs.each((index, input) => {
-                cy.wrap(input).click();
-                cy.wait(1000);
-            });
-
-            inputs.each((index, input) => {
-                cy.wrap(input).should('not.be.checked');
-            });
-        });
-}
-
-describe('Disable all notifications and check', () => {
+describe('test all turned on notifications', () => {
     let userDataFirst;
     let userDataSecond;
     let accessTokenFirstUser;
@@ -40,15 +22,11 @@ describe('Disable all notifications and check', () => {
         setupUser().then((data) => {
             userDataFirst = data.userData;
             accessTokenFirstUser = data.token;
-            myProfile.choseMenuInSettings(SettingsMenu.Notifications, SettingsMenuBlocks.AccountNotifications);
-            disableAllNotifications();
             myProfile.navigateToMenuItem(ProfileActions.LOGOUT);
         });
         setupUser().then((data) => {
             userDataSecond = data.userData;
             accessTokenSecondUser = data.token;
-            myProfile.choseMenuInSettings(SettingsMenu.Notifications, SettingsMenuBlocks.AccountNotifications);
-            disableAllNotifications();
             myProfile.navigateToMenuItem(ProfileActions.LOGOUT);
         });
     });
@@ -101,19 +79,41 @@ describe('Disable all notifications and check', () => {
         postsService.changeStatusOrder(accessTokenFirstUser, orderId, 'DONE');
     });
 
-    it('after turned off all notifications First user has 0 notifications', () => {
+    it('assert notifications First user', () => {
         cy.login(userDataFirst.email, userDataFirst.password);
         myProfile.openNotification();
-        cy.get('h6').contains('Сповіщення');
-        cy.get('p').contains('Немає нових сповіщень');
+        cy.get('[role="menu"]').within(() => {
+            cy.contains('Вам надійшло нове замовлення').should('be.visible');
+            cy.contains(`Користувач @${userDataSecond.nickname} додав новий відгук до вашої послуги`).should('be.visible');
+            cy.contains(`Користувач @${userDataSecond.nickname} прокоментував ваш пост`).should('be.visible');
+            cy.contains(`Користувач @${userDataSecond.nickname} відповів на ваш коментар`).should('be.visible');
+            cy.contains(`Користувач @${userDataSecond.nickname} вподобав ваш коментар`).should('be.visible');
+            cy.get('[data-testid="KeyboardArrowDownOutlinedIcon"]').click();
+            cy.wait(1000);
+            cy.contains(`Нова вподобайка до вашого посту від @${userDataSecond.nickname}`).should('be.visible');
+            cy.contains(`У вас новий підписник: @${userDataSecond.nickname}`).should('be.visible');
+            cy.get('[data-testid="DeleteOutlinedIcon"]').click();
+            cy.get('p').contains('Немає нових сповіщень');
+        });
         myProfile.navigateToMenuItem(ProfileActions.LOGOUT);
     });
 
-    it('after turned off all notifications Second user has 0 notifications', () => {
+    it('assert notifications Second user', () => {
         cy.login(userDataSecond.email, userDataSecond.password);
         myProfile.openNotification();
-        cy.get('h6').contains('Сповіщення');
-        cy.get('p').contains('Немає нових сповіщень');
+        cy.get('[role="menu"]').within(() => {
+            cy.get('p')
+                .filter((index, element) => {
+                    return element.textContent.includes('Ваше замовлення №1 змінило статус');
+                })
+                .should('have.length', 3);
+        });
+        cy.get('[role="menu"]').within(() => {
+            cy.contains(`Користувач @${userDataFirst.nickname} додав нову послугу`).should('be.visible');
+            cy.contains(`Користувач @${userDataFirst.nickname} запостив щось новеньке`).should('be.visible');
+            cy.get('[data-testid="ClearOutlinedIcon"]').eq(4).click();
+            cy.contains(`Користувач @${userDataFirst.nickname} запостив щось новеньке`).should('not.exist');
+        });
         cy.deleteAccount(userDataSecond.password);
         cy.login(userDataFirst.email, userDataFirst.password);
         cy.deleteAccount(userDataFirst.password);
