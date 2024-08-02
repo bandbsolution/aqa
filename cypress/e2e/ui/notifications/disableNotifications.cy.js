@@ -1,7 +1,7 @@
 import MyProfile from '../../../support/pages/MyProfile';
 import { ProfileActions, SettingsMenu, SettingsMenuBlocks } from '../../../support/enums';
 
-import { setupUser } from '../../../support/helper';
+import { deleteAccount, login, setupUser } from '../../../support/helper';
 import { authService, postsService } from '../../../api/services';
 
 const myProfile = new MyProfile();
@@ -102,7 +102,7 @@ describe('Disable all notifications and check', () => {
     });
 
     it('after turned off all notifications First user has 0 notifications', () => {
-        cy.login(userDataFirst.email, userDataFirst.password);
+        login(userDataFirst.email, userDataFirst.password);
         myProfile.openNotification();
         cy.get('h6').contains('Сповіщення');
         cy.get('p').contains('Немає нових сповіщень');
@@ -110,12 +110,12 @@ describe('Disable all notifications and check', () => {
     });
 
     it('after turned off all notifications Second user has 0 notifications', () => {
-        cy.login(userDataSecond.email, userDataSecond.password);
+        login(userDataSecond.email, userDataSecond.password);
         myProfile.openNotification();
         cy.get('h6').contains('Сповіщення');
         cy.get('p').contains('Немає нових сповіщень');
-        cy.deleteAccount(userDataSecond.password);
-        cy.login(userDataFirst.email, userDataFirst.password);
-        cy.deleteAccount(userDataFirst.password);
+        deleteAccount(userDataSecond.password);
+        login(userDataFirst.email, userDataFirst.password);
+        deleteAccount(userDataFirst.password);
     });
 });

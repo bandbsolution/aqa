@@ -1,20 +1,21 @@
+import 'cypress-iframe';
 import { faker } from '@faker-js/faker';
-
-import MainPage from '../support/pages/MainPage';
 import AuthModals from '../support/modals/AuthModals';
+import { SettingsMenu, SettingsMenuBlocks } from './enums';
+const { MailSlurp } = require('mailslurp-client');
+
+const mailslurp = new MailSlurp({ apiKey: Cypress.env('MAILSLURP_API_KEY') });
+const authModals = new AuthModals();
 
 export function createUser(customEmail, customNickname, shouldAssert = true) {
-    const mainPage = new MainPage();
-    const authModals = new AuthModals();
-
     const password = '12345678aA';
     const email = customEmail || faker.internet.email();
     const name = faker.person.firstName();
     const surname = faker.person.lastName();
     const nickname = customNickname || faker.internet.userName();
 
-    mainPage.visit();
-    mainPage.openLoginModal();
+    authModals.visit();
+    authModals.openLoginModal();
     authModals.clickOnCreateAcc();
     authModals.typeName(name);
     authModals.typeSurname(surname);
@@ -37,8 +38,8 @@ export function setupUser() {
 
     return createUser().then((user) => {
         userData = user;
-        return cy.activateAccount(user.email).then(() => {
-            return cy.login(userData.email, userData.password).then(() => {
+        return activateAccount(user.email).then(() => {
+            return login(userData.email, userData.password).then(() => {
                 token = window.localStorage.getItem('accessToken');
                 return { userData, token };
             });
@@ -55,4 +56,59 @@ export function checkRequiredFields(expectedCount) {
                 cy.wrap($el).should('be.visible');
             });
     });
+}
+
+export function createInbox() {
+    return mailslurp.createInbox();
+}
+
+export function waitForLatestEmail(inboxId) {
+    const timeoutMillis = 30_000;
+    return mailslurp.waitForLatestEmail(inboxId, timeoutMillis);
+}
+
+export function emailCount(inboxId) {
+    return mailslurp.inboxController.getInboxEmailCount({ inboxId: inboxId });
+}
+
+export function deleteAllEmails() {
+    return mailslurp.emailController.deleteAllEmails();
+}
+
+export function selectDropdownOption(dropdownName, optionText) {
+    cy.get(`input[placeholder="${dropdownName}"]`).click();
+    cy.get('.MuiAutocomplete-listbox li').contains(optionText).click();
+}
+
+export function activateAccount(email, shouldAssert = true) {
+    const encodedEmail = btoa(email);
+    const correctUrl = Cypress.config('baseUrl').replace('/ua', '');
+    const activationUrl = `${correctUrl}?isActive=${encodedEmail}`;
+    cy.visit(activationUrl);
+    cy.wait(500);
+    if (shouldAssert) {
+        return authModals.assertNotification('Акаунт успішно активовано');
+    }
+    return cy.wrap(null);
+}
+
+export function deleteAccount(password) {
+    authModals.choseMenuInSettings(SettingsMenu.SettingsAccount, SettingsMenuBlocks.DeleteAccount);
+    cy.wait(3000);
+    cy.iframe('#accSettingsPage').find('button').contains('Видалити акаунт').should('be.visible').click({ force: true });
+    cy.get('[type="password"]').type(password, { force: true });
+    cy.get('button').contains('Видалити').click({ force: true });
+    cy.wait(1000);
+    authModals.assertNotification('Акаунт успішно видалено');
+    authModals.assertUrl(Cypress.config('baseUrl'));
+}
+
+export function login(email, password) {
+    authModals.visit();
+    authModals.openLoginModal();
+    authModals.typeEmail(email);
+    authModals.typePassword(password);
+    authModals.clickOnLoginBtn();
+    authModals.waitFoDataLoad();
+    return cy.wrap(null);
 }

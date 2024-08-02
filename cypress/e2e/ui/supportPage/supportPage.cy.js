@@ -1,6 +1,6 @@
 import SupportPage from '../../../support/pages/SupportPage';
 import { faker } from '@faker-js/faker';
-import { setupUser } from '../../../support/helper';
+import { deleteAccount, setupUser } from '../../../support/helper';
 import { ProfileActions } from '../../../support/enums';
 
 const supportPage = new SupportPage();
@@ -79,7 +79,7 @@ describe('support page', () => {
             cy.get('.footer-address-text').should('not.exist');
             supportPage.visit(Cypress.config('baseUrl'));
             cy.get('.footer-address-text').should('not.exist');
-            cy.deleteAccount(data.userData.password);
+            deleteAccount(data.userData.password);
         });
     });
 });

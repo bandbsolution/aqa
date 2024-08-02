@@ -1,7 +1,7 @@
 import MyProfile from '../../../support/pages/MyProfile';
 import { SettingsMenu, SettingsMenuBlocks } from '../../../support/enums';
 
-import { setupUser } from '../../../support/helper';
+import { deleteAccount, setupUser } from '../../../support/helper';
 
 const myProfile = new MyProfile();
 
@@ -29,7 +29,7 @@ describe('default values for notifications on new created user', () => {
             cy.get('p').contains('Немає нових сповіщень');
             myProfile.choseMenuInSettings(SettingsMenu.Notifications, SettingsMenuBlocks.AccountNotifications);
             checkNotificationsByDefault();
-            cy.deleteAccount(userDataFirst.password);
+            deleteAccount(userDataFirst.password);
         });
     });
 });

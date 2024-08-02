@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import AuthModals from '../../../support/modals/AuthModals';
-import { checkRequiredFields, createUser, setupUser } from '../../../support/helper';
+import { activateAccount, checkRequiredFields, createUser, setupUser } from '../../../support/helper';
 import { ProfileActions } from '../../../support/enums';
 
 const authModals = new AuthModals();
@@ -106,10 +106,7 @@ describe('register user functional (modal)', () => {
     });
 
     it('activate already activated account', () => {
-        const encodedEmail = btoa(userDataFirst.email);
-        const correctUrl = Cypress.config('baseUrl').replace('/ua', '');
-        const activationUrl = `${correctUrl}?isActive=${encodedEmail}`;
-        cy.visit(activationUrl);
+        activateAccount(userDataFirst.email)
         authModals.assertNotification('Акаунт вже було активовано', { timeout: 50000 });
     });
 
