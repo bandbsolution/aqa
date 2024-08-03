@@ -1,7 +1,7 @@
 import MyProfile from '../../../support/pages/MyProfile';
 import { ProfileActions } from '../../../support/enums';
 
-import { setupUser } from '../../../support/helper';
+import { deleteAccount, login, setupUser } from '../../../support/helper';
 import { authService, postsService } from '../../../api/services';
 
 const myProfile = new MyProfile();
@@ -80,7 +80,7 @@ describe('test all turned on notifications', () => {
     });
 
     it('assert notifications First user', () => {
-        cy.login(userDataFirst.email, userDataFirst.password);
+        login(userDataFirst.email, userDataFirst.password);
         myProfile.openNotification();
         cy.get('[role="menu"]').within(() => {
             cy.contains('Вам надійшло нове замовлення').should('be.visible');
@@ -99,7 +99,7 @@ describe('test all turned on notifications', () => {
     });
 
     it('assert notifications Second user', () => {
-        cy.login(userDataSecond.email, userDataSecond.password);
+        login(userDataSecond.email, userDataSecond.password);
         myProfile.openNotification();
         cy.get('[role="menu"]').within(() => {
             cy.get('p')
@@ -114,8 +114,8 @@ describe('test all turned on notifications', () => {
             cy.get('[data-testid="ClearOutlinedIcon"]').eq(4).click();
             cy.contains(`Користувач @${userDataFirst.nickname} запостив щось новеньке`).should('not.exist');
         });
-        cy.deleteAccount(userDataSecond.password);
-        cy.login(userDataFirst.email, userDataFirst.password);
-        cy.deleteAccount(userDataFirst.password);
+        deleteAccount(userDataSecond.password);
+        login(userDataFirst.email, userDataFirst.password);
+        deleteAccount(userDataFirst.password);
     });
 });
