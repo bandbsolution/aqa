@@ -1,6 +1,13 @@
 import { faker } from '@faker-js/faker';
 import AuthModals from '../../../support/modals/AuthModals';
-import { activateAccount, checkRequiredFields, createUser, setupUser } from '../../../support/helper';
+import {
+    activateAccount,
+    checkRequiredFields,
+    createUser,
+    deleteAccount,
+    login,
+    setupUser,
+} from '../../../support/helper';
 import { ProfileActions } from '../../../support/enums';
 
 const authModals = new AuthModals();
@@ -16,8 +23,8 @@ describe('register user functional (modal)', () => {
     });
 
     after(() => {
-        cy.login(userDataFirst.email, userDataFirst.password);
-        cy.deleteAccount(userDataFirst.password);
+        login(userDataFirst.email, userDataFirst.password);
+        deleteAccount(userDataFirst.password);
     });
 
     it('validation errors for fields - should be correct values', () => {
@@ -106,7 +113,7 @@ describe('register user functional (modal)', () => {
     });
 
     it('activate already activated account', () => {
-        activateAccount(userDataFirst.email)
+        activateAccount(userDataFirst.email, false)
         authModals.assertNotification('Акаунт вже було активовано', { timeout: 50000 });
     });
 

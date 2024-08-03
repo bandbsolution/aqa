@@ -38,11 +38,10 @@ export function setupUser() {
 
     return createUser().then((user) => {
         userData = user;
-        return activateAccount(user.email).then(() => {
-            return login(userData.email, userData.password).then(() => {
-                token = window.localStorage.getItem('accessToken');
-                return { userData, token };
-            });
+        activateAccount(user.email);
+        login(userData.email, userData.password).then(() => {
+            token = window.localStorage.getItem('accessToken');
+            return { userData, token };
         });
     });
 }
@@ -59,20 +58,20 @@ export function checkRequiredFields(expectedCount) {
 }
 
 export function createInbox() {
-    return mailslurp.createInbox();
+    return cy.wrap(mailslurp.createInbox());
 }
 
 export function waitForLatestEmail(inboxId) {
     const timeoutMillis = 30_000;
-    return mailslurp.waitForLatestEmail(inboxId, timeoutMillis);
+    return cy.wrap(mailslurp.waitForLatestEmail(inboxId, timeoutMillis));
 }
 
 export function emailCount(inboxId) {
-    return mailslurp.inboxController.getInboxEmailCount({ inboxId: inboxId });
+    return cy.wrap(mailslurp.inboxController.getInboxEmailCount({ inboxId: inboxId }));
 }
 
 export function deleteAllEmails() {
-    return mailslurp.emailController.deleteAllEmails();
+    return cy.wrap(mailslurp.emailController.deleteAllEmails());
 }
 
 export function selectDropdownOption(dropdownName, optionText) {
