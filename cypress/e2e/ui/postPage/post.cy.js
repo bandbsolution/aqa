@@ -1,37 +1,45 @@
-import PostModal from '../support/modals/PostModal';
-import { PostActions, ProfileActions } from '../support/enums';
+import PostModal from '../../../support/modals/PostModal';
+import { PostActions, ProfileActions } from '../../../support/enums';
+import { deleteAccount, login, setupUser } from '../../../support/helper';
+import { faker } from '@faker-js/faker';
+import MyProfile from '../../../support/pages/MyProfile';
 
 const postModal = new PostModal();
+const myProfile = new MyProfile();
 const today = new Date();
 const formatter = new Intl.DateTimeFormat('uk-UA', { day: '2-digit', month: 'long', year: 'numeric' });
 const formattedDate = formatter.format(today).replace(' р.', ' р.');
 
 describe('smoke post', () => {
-    let userData;
+    let userDataFirst;
 
     before(() => {
-        cy.createUser('first').then((user) => {
-            cy.activateAccount(user.email);
-            userData = user;
+        setupUser().then((data) => {
+            userDataFirst = data.userData;
+            postModal.navigateToMenuItem(ProfileActions.LOGOUT);
         });
     });
 
     beforeEach(() => {
-        cy.login(userData.email, userData.password);
+        login(userDataFirst.email, userDataFirst.password);
     });
 
     after(() => {
-        cy.deleteAccount(userData.password);
+        deleteAccount(userDataFirst.password);
     });
 
     it('create post', () => {
-        cy.createPost().then(({ randomPostText }) => {
-            postModal.waitFoDataLoad();
-            cy.get('span').contains('Читати більше').click();
-            cy.get('p').contains(`@${userData.nickname}`).should('be.visible');
-            cy.get('.postDescription').contains(randomPostText).should('be.visible');
-            cy.contains('span', formattedDate).should('be.visible');
-        });
+        const randomPostText = faker.lorem.paragraph({ min: 8, max: 10 });
+
+        myProfile.clickOnCreateServiceOrPostIf0();
+        postModal.typeTextPost(randomPostText);
+        postModal.clickOnCreatePostBtn();
+        postModal.assertNotification('Пост успішно створено');
+        postModal.waitFoDataLoad();
+        cy.get('span').contains('Читати більше').click();
+        cy.get('p').contains(`@${userDataFirst.nickname}`).should('be.visible');
+        cy.get('.postDescription').contains(randomPostText).should('be.visible');
+        cy.contains('span', formattedDate).should('be.visible');
     });
 
     it('edit post', () => {
@@ -73,11 +81,13 @@ describe('smoke post', () => {
     });
 
     it('opened new tab if click on comment icon', () => {
-        cy.window().then(win => {
-            cy.stub(win, 'open').callsFake((url) => {
-                Cypress.env('postUrl', url);
-                expect(url).to.include(Cypress.config('baseUrl') + '/post');
-            }).as('windowOpen');
+        cy.window().then((win) => {
+            cy.stub(win, 'open')
+                .callsFake((url) => {
+                    Cypress.env('postUrl', url);
+                    expect(url).to.include(Cypress.config('baseUrl') + '/post');
+                })
+                .as('windowOpen');
         });
 
         cy.get('[data-testid="ChatBubbleOutlineIcon"]').eq(1).click();

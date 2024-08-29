@@ -1,7 +1,9 @@
-import PostModal from '../support/modals/PostModal';
-import { CommentActions, ProfileActions } from '../support/enums';
+import PostModal from '../../../support/modals/PostModal';
+import { CommentActions, ProfileActions } from '../../../support/enums';
 import { faker } from '@faker-js/faker';
-import { getUserToken } from '../support/apiHelper';
+import { setupUser } from '../../../support/helper';
+import { postsService } from '../../../api/services';
+import { deleteAccount, login } from '../../../support/helper';
 
 const postModal = new PostModal();
 const randomComment = faker.lorem.lines(1);
@@ -14,29 +16,21 @@ describe('smoke comments', () => {
     let accessTokenFirstUser;
 
     before(() => {
-        cy.createUser('first').then((user) => {
-            cy.activateAccount(user.email);
-            userDataFirst = user;
-
-            cy.login(userDataFirst.email, userDataFirst.password);
-            getUserToken().then((token) => {
-                accessTokenFirstUser = token;
-
-                cy.createPostAPI(accessTokenFirstUser, faker.lorem.paragraph({ min: 8, max: 10 })).then((response) => {
-                    console.log('Response body created POST:', JSON.stringify(response));
-                    postModal.navigateToMenuItem(ProfileActions.LOGOUT);
-                });
-            });
+        setupUser().then((data) => {
+            userDataFirst = data.userData;
+            accessTokenFirstUser = data.token;
+            postsService.createPost(accessTokenFirstUser, faker.lorem.paragraph({ min: 8, max: 10 }));
+            postModal.navigateToMenuItem(ProfileActions.LOGOUT);
         });
     });
 
     beforeEach(() => {
-        cy.login(userDataFirst.email, userDataFirst.password);
+        login(userDataFirst.email, userDataFirst.password);
         cy.get('span').contains('Читати більше').click({ force: true });
     });
 
     after(() => {
-        cy.deleteAccount(userDataFirst.password);
+        deleteAccount(userDataFirst.password);
     });
 
     it('add comment', () => {
@@ -66,7 +60,6 @@ describe('smoke comments', () => {
         cy.wait(3000);
         cy.get('[data-testid="ReplyIcon"]', { timeout: 5000 }).click();
         cy.get('[placeholder="Відповісти"]').type(randomReplyOnComment);
-        // cy.wait(3000);
         cy.get('button').eq(10).click();
         cy.get('span').contains('Показати відповіді').click();
         cy.wait(3000);
