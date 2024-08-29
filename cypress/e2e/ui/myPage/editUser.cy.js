@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import MyProfile from '../../../support/pages/MyProfile';
-import { checkRequiredFields, setupUser } from '../../../support/helper';
+import { checkRequiredFields, deleteAccount, login, setupUser } from '../../../support/helper';
 import { ProfileActions } from '../../../support/enums';
 
 const myProfile = new MyProfile();
@@ -26,13 +26,13 @@ describe('edit user functional', () => {
     });
 
     beforeEach(() => {
-        cy.login(userData.email, userData.password);
+        login(userData.email, userData.password);
     });
 
     after(() => {
-        cy.deleteAccount(userData.password);
-        cy.login(userDataSecond.email, userDataSecond.password);
-        cy.deleteAccount(userDataSecond.password);
+        deleteAccount(userData.password);
+        login(userDataSecond.email, userDataSecond.password);
+        deleteAccount(userDataSecond.password);
     });
 
     it('assert default values', () => {
