@@ -132,7 +132,7 @@
         </ResultCollector>
         <hashTree/>
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer">
-          <intProp name="calcMode">0</intProp>
+          <intProp name="calcMode">2</intProp>
           <doubleProp>
             <name>throughput</name>
             <value>6000.0</value>
