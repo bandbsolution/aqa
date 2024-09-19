@@ -13,7 +13,7 @@
         <intProp name="ThreadGroup.num_threads">250</intProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
         <longProp name="ThreadGroup.duration">300</longProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
@@ -23,7 +23,6 @@
       </ThreadGroup>
       <hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/blocked-users</stringProp>
@@ -37,7 +36,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/muted-users/get-muted-users</stringProp>
@@ -51,7 +49,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/muted-users/get-muted-users</stringProp>
@@ -65,7 +62,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/muted-users/get-muted-users</stringProp>
@@ -79,7 +75,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/blocked-users</stringProp>
@@ -93,7 +88,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/user</stringProp>
@@ -107,7 +101,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/user</stringProp>
@@ -121,7 +114,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/get-subscribers</stringProp>
@@ -143,7 +135,6 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <intProp name="HTTPSampler.response_timeout">0</intProp>
           <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/auth/get-subscriptions</stringProp>
@@ -201,7 +192,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
