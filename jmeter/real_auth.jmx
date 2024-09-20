@@ -12,7 +12,7 @@
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
         <intProp name="ThreadGroup.num_threads">150</intProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
-        <longProp name="ThreadGroup.duration">300</longProp>
+        <longProp name="ThreadGroup.duration">150</longProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -242,7 +242,7 @@
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbdG9rZW5dIDRiYWY1ODQzLWU4YWYtNDVkNy04NDJiLTYyZWU0ZGJjZDAxOCIsImV4cCI6MTcyNjgyNTQzMX0.G3S7txwVH9UkCvYr7wNWxDlZQVW_Bf9dvC0OhGyJRCj-scftihfa0Fuc5q23F_Y25LXD9roncj1-4N7YOeIzcQ</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbdG9rZW5dIDRiYWY1ODQzLWU4YWYtNDVkNy04NDJiLTYyZWU0ZGJjZDAxOCIsImV4cCI6MTcyNjkwNTIzOH0.O2B7xKex8G9n0Aj3eiw-a2WR9xLca4hQw5NS3LetHVvNszHQA9DiouV6dj70t0wj4H3rpLptxhtZOfRpqxuE1w</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
