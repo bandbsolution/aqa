@@ -1,27 +1,36 @@
 {
-  "dependencies": {
-    "@faker-js/faker": "^8.4.1",
-    "axios": "^1.7.2",
-    "cypress-iframe": "^1.0.1",
-    "mailslurp-client": "^15.20.2"
-  },
-  "scripts": {
-    "cy:open": "cypress open",
-    "cypress:run": "cypress run",
-    "merge-reports": "npx mochawesome-merge results/*.json > mochawesome.json && npx marge mochawesome.json",
-    "test": "npm run cypress:run && npm run merge-reports"
-  },
-  "devDependencies": {
-    "@cypress/webpack-dev-server": "^3.10.0",
-    "@cypress/webpack-preprocessor": "^6.0.2",
-    "cypress": "^13.13.0",
-    "cypress-file-upload": "^5.0.8",
-    "cypress-multi-reporters": "^1.6.4",
-    "mocha-junit-reporter": "^2.2.1",
-    "mochawesome": "^7.1.3",
-    "mochawesome-merge": "^4.3.0",
-    "mochawesome-report-generator": "^6.2.0",
-    "prettier": "^3.3.2",
-    "typescript": "^5.5.4"
-  }
+    "dependencies": {
+        "@faker-js/faker": "^8.4.1",
+        "axios": "^1.7.2",
+        "cypress-iframe": "^1.0.1",
+        "mailslurp-client": "^15.20.2"
+    },
+    "scripts": {
+        "test:prod": "NODE_ENV=prod cypress open",
+        "test:sb:electron:1536x864": "cypress open --browser electron --env VIEWPORT_WIDTH=1536,VIEWPORT_HEIGHT=864",
+        "test:sb:electron:1366x768": "cypress open --browser electron --env VIEWPORT_WIDTH=1366,VIEWPORT_HEIGHT=768",
+        "test:sb:electron:1440x900": "cypress open --browser electron --env VIEWPORT_WIDTH=1440,VIEWPORT_HEIGHT=900",
+        "test:sb:electron:2560x1440": "cypress open --browser electron --env VIEWPORT_WIDTH=2560,VIEWPORT_HEIGHT=1440",
+        "test:sb:electron:1280x720": "cypress open --browser electron --env VIEWPORT_WIDTH=1280,VIEWPORT_HEIGHT=720",
+        "test:sb:electron:1680x1050": "cypress open --browser electron --env VIEWPORT_WIDTH=1680,VIEWPORT_HEIGHT=1050",
+        "test:sb:electron:1600x900": "cypress open --browser electron --env VIEWPORT_WIDTH=1600,VIEWPORT_HEIGHT=900",
+        "test:sb:electron:1920x1200": "cypress open --browser electron --env VIEWPORT_WIDTH=1920,VIEWPORT_HEIGHT=1200",
+        "cy:open": "cypress open --browser electron",
+        "cypress:run": "cypress run",
+        "merge-reports": "npx mochawesome-merge results/*.json > mochawesome.json && npx marge mochawesome.json",
+        "test": "npm run cypress:run && npm run merge-reports"
+    },
+    "devDependencies": {
+        "@cypress/webpack-dev-server": "^3.10.0",
+        "@cypress/webpack-preprocessor": "^6.0.2",
+        "cypress": "^13.15.0",
+        "cypress-file-upload": "^5.0.8",
+        "cypress-multi-reporters": "^1.6.4",
+        "mocha-junit-reporter": "^2.2.1",
+        "mochawesome": "^7.1.3",
+        "mochawesome-merge": "^4.3.0",
+        "mochawesome-report-generator": "^6.2.0",
+        "prettier": "^3.3.2",
+        "typescript": "^5.5.4"
+    }
 }

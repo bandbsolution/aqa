@@ -32,16 +32,18 @@ export function createUser(customEmail, customNickname, shouldAssert = true) {
     return cy.wrap({ email, password, name, surname, nickname });
 }
 
-export function setupUser() {
+export function setupUser(customEmail) {
     let userData;
     let token;
 
-    return createUser().then((user) => {
+    return createUser(customEmail).then((user) => {
         userData = user;
         activateAccount(user.email);
-        login(userData.email, userData.password).then(() => {
-            token = window.localStorage.getItem('accessToken');
-            return { userData, token };
+        return login(userData.email, userData.password).then(() => {
+            return cy.window().then((win) => {
+                token = win.localStorage.getItem('accessToken');
+                return { userData, token };
+            });
         });
     });
 }
@@ -110,4 +112,45 @@ export function login(email, password) {
     authModals.clickOnLoginBtn();
     authModals.waitFoDataLoad();
     return cy.wrap(null);
+}
+
+export function logIntoGoogle() {
+    const username = Cypress.env('GOOGLE_USERNAME');
+    const password = Cypress.env('GOOGLE_PASSWORD');
+
+    Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop') && !err.message.includes('Error in protected function'));
+
+    cy.session(
+        [username, password],
+        () => {
+            cy.visit(Cypress.config('baseUrl'));
+            cy.location('href', { timeout: 10000 }).then((currentUrl) => {
+                if (currentUrl.includes('accounts.google.com')) {
+                    cy.get('input[type="email"]').type(username, { log: false });
+                    cy.contains('Next').click();
+                    cy.get('input[type="password"]').type(password, { log: false });
+                    cy.contains('Next').click().wait(4000);
+                    cy.visit('/');
+
+                    cy.getCookie('GCP_IAP_UID').then((cookie) => {
+                        if (cookie) {
+                            Cypress.env('GCP_IAP_UID', cookie.value);
+                        }
+                    });
+
+                    cy.getCookie('__Host-GCP_IAP_AUTH_TOKEN_A610B7646B59DE87').then((cookie) => {
+                        if (cookie) {
+                            Cypress.env('__Host-GCP_IAP_AUTH_TOKEN_A610B7646B59DE87', cookie.value);
+                        }
+                    });
+                }
+            });
+        },
+        {
+            cacheAcrossSpecs: true,
+            validate: () => {
+                cy.getCookie('__Host-GCP_IAP_AUTH_TOKEN_A610B7646B59DE87').should('exist');
+            },
+        }
+    );
 }

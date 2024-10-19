@@ -5,18 +5,16 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
         <intProp name="ThreadGroup.num_threads">1</intProp>
-        <longProp name="ThreadGroup.duration">150</longProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
-        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <longProp name="ThreadGroup.duration">300</longProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
@@ -126,137 +124,6 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/posts/post/search?count=4&amp;start=0&amp;sortDirection=DESC&amp;fieldToSortBy=creationTimeForPost&amp;searchString=&amp;fieldsToSearchBy=description</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/auth/search?count=6&amp;startWith=0&amp;searchString=</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/posts/post/userPost/2535eef0-113f-4347-b503-be7fd13394b6?page=0&amp;size=8</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/posts/post</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">description: It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &apos;Content here, content here&apos;, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for &apos;lorem ipsum&apos; will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
-          <stringProp name="HTTPSampler.domain">dev.bonfairplace.com</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/posts/service</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;nameService&quot;&#xd;
-&#xd;
-test&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;category&quot;&#xd;
-&#xd;
-Їжа та напої&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;description&quot;&#xd;
-&#xd;
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &apos;Content here, content here&apos;, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for &apos;lorem ipsum&apos; will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;price&quot;&#xd;
-&#xd;
-100&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;currency&quot;&#xd;
-&#xd;
-грн&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;valueOfInitOfMeasure&quot;&#xd;
-&#xd;
-9&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;initOfMeasure&quot;&#xd;
-&#xd;
-м&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;availability&quot;&#xd;
-&#xd;
-Є в наявності&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;deliveryOption&quot;&#xd;
-&#xd;
-УкрПошта,Нова Пошта&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;paymentOption&quot;&#xd;
-&#xd;
-Оплата при отриманні&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;deliveryDays&quot;&#xd;
-&#xd;
-Понеділок,Вівторок,Середа,Четвер,П&apos;ятниця,Субота,Неділя&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;estimatedTime&quot;&#xd;
-&#xd;
-3&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak&#xd;
-Content-Disposition: form-data; name=&quot;availableQuantity&quot;&#xd;
-&#xd;
-10&#xd;
-------WebKitFormBoundaryiRssBLsBOAHMZaak--</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
@@ -331,7 +198,7 @@ Content-Disposition: form-data; name=&quot;availableQuantity&quot;&#xd;
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer">
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="false">
           <intProp name="calcMode">0</intProp>
           <doubleProp>
             <name>throughput</name>
@@ -340,15 +207,11 @@ Content-Disposition: form-data; name=&quot;availableQuantity&quot;&#xd;
           </doubleProp>
         </ConstantThroughputTimer>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="false">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbdG9rZW5dIDI1MzVlZWYwLTExM2YtNDM0Ny1iNTAzLWJlN2ZkMTMzOTRiNiIsImV4cCI6MTcyNzI0ODk0MH0.U33jq49rcaK1tPirL2Vxv-n-28PEkb7WSBpUPAqGbED-yd0hBAMMSScdDzE2BnN6Zj8HzPQ9MoZuaxrtw0HMdg </stringProp>
-            </elementProp>
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Content-type</stringProp>
-              <stringProp name="Header.value">multipart/form-data; boundary=----WebKitFormBoundaryiRssBLsBOAHMZaak </stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbdG9rZW5dIDRiYWY1ODQzLWU4YWYtNDVkNy04NDJiLTYyZWU0ZGJjZDAxOCIsImV4cCI6MTcyNjY0NDM4M30.Ij0z74zWP8wszmR12LHcQhyofgPISdM8yQxYaQKVARmCU-dArgep9FjQFW_Mrl46pd7f787YouGT_MxQMxoYOQ </stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
