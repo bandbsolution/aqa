@@ -1,12 +1,12 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-    viewportHeight: 1080,
-    viewportWidth: 1920,
     watchForFileChanges: false,
     defaultCommandTimeout: 6000,
     experimentalMemoryManagement: true,
+    experimentalModifyObstructiveThirdPartyCode: true,
     chromeWebSecurity: false,
+    numTestsKeptInMemory: 50,
     reporter: 'mochawesome',
     reporterOptions: {
         reportDir: 'results',
@@ -15,11 +15,23 @@ export default defineConfig({
         json: true,
     },
     e2e: {
-        baseUrl: 'https://dev.bonfairplace.com/ua',
-        setupNodeEvents() {},
+        experimentalOriginDependencies: true,
+        baseUrl: process.env.NODE_ENV === 'prod' ? 'http://localhost:8080' : 'https://dev.bonfairplace.com/ua',
+        setupNodeEvents(on, config) {
+            const viewportWidth = config.env.VIEWPORT_WIDTH || 1920;
+            const viewportHeight = config.env.VIEWPORT_HEIGHT || 1080;
+
+            return {
+                ...config,
+                viewportWidth: parseInt(viewportWidth as string, 10),
+                viewportHeight: parseInt(viewportHeight as string, 10),
+            };
+        },
         env: {
-            MAILSLURP_API_KEY: 'ef2fac5b48dfa754a70c70e63d31dee02a691c11eb25a47741d687a6430bc39d',
-            baseApiUrl: 'https://dev.bonfairplace.com/v1/',
+            MAILSLURP_API_KEY: '',
+            baseApiUrl: process.env.NODE_ENV === 'prod' ? 'http://localhost:8080' : 'https://dev.bonfairplace.com/v1/',
+            GOOGLE_USERNAME: '',
+            GOOGLE_PASSWORD: '',
         },
         supportFile: 'cypress/support/e2e.js',
         experimentalRunAllSpecs: true,

@@ -5,6 +5,14 @@
 // This is a great place to put global configuration and
 // behavior that modifies Cypress.
 //
+// support/index.js
+
+import { logIntoGoogle } from './helper';
+
+beforeEach(() => {
+    logIntoGoogle();
+});
+
 // You can change the location of this file or turn off
 // automatically serving support files with the
 // 'supportFile' configuration option.
@@ -14,8 +22,6 @@
 // ***********************************************************
 
 // Import commonCommands.js using ES2015 syntax:
-import './commands/commonCommands';
-import './commands/userCommands';
 import './commands/serviceCommands';
 import './commands/postCommands';
 
